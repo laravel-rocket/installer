@@ -1,0 +1,28 @@
+{
+    "name": "laravel-rocket/installer",
+    "description": "Laravel Rocket Laravel Boilerplate installer.",
+    "keywords": ["laravel","boilerplate"],
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Takaaki Mizuno",
+            "email": "takaaki.mizuno@gmail.com"
+        }
+    ],
+    "autoload": {
+        "psr-4": {
+            "LaravelRocket\\Installer\\": "src/"
+        }
+    },
+    "require": {
+        "ext-zip": "*",
+        "guzzlehttp/guzzle": "~4.0|~5.0|~6.0",
+        "symfony/console": "~2.3|~3.0",
+        "symfony/process": "~2.3|~3.0",
+        "kevinlebrun/colors.php": "0.*"
+    },
+    "bin": [
+        "rocket"
+    ]
+}
+

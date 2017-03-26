@@ -1,0 +1,25 @@
+/vendor
+.env
+.env.*
+!.env.example
+
+composer.phar
+.DS_Store
+Thumbs.db
+#*#
+*~
+*.swp
+.#
+.idea
+_ide_helper.php
+_ide_helper_models.php
+
+# Frontend Development modules
+node_modules
+bower_components
+.sass-cache
+
+*.sql
+*.zip
+*.csv
+
