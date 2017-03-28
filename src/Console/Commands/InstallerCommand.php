@@ -175,6 +175,11 @@ class InstallerCommand extends Command
             'NAME' => $name,
         ], $appConfigPath);
 
+        $siteConfigPath = realpath($appDirectory.'/config/site.php');
+        $this->replace([
+            'NAME' => $name,
+        ], $siteConfigPath);
+
         $appConfigPath = realpath($appDirectory.'/config/session.php');
         $this->replace([
             'SESSION_NAME' => $cookieName,
