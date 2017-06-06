@@ -42,9 +42,17 @@ class InstallerCommand extends Command
         $this->verifyApplicationDoesntExist($this->makeAppDirectory($name));
         $directory = getcwd();
 
-        $output->writeln('<info>Setting up application "'.$name.'"...</info>');
+        $output->writeln('<info>Setting up application "'.$name.'" with Laravel Rocket 🚀 ...</info>');
 
-        $this->download($zipFile = $this->makeFilename())->extract($name, $zipFile, $directory)->cleanUp($zipFile);
+        $output->writeln('');
+        $helper = $this->getHelper('question');
+        $questionText = $color('Do you want to use AdminLTE for Admin Dashboard?')->green()->bold().' ';
+        $question = new ConfirmationQuestion($questionText, false);
+
+        $branch = $helper->ask($input, $output, $question) ? 'adminlte' : 'master';
+
+        $this->download($zipFile = $this->makeFilename(), $branch)->extract($name, $zipFile, $directory,
+            $branch)->cleanUp($zipFile);
 
         $composer = $this->findComposer();
         $commands = [
@@ -62,15 +70,6 @@ class InstallerCommand extends Command
 
         $this->replaceAppName($name, $directory);
 
-        /*
-        $output->writeln('');
-        $helper = $this->getHelper('question');
-        $questionText = $color('Do you want to have API?')->green()->bold() . '';
-        $question = new ConfirmationQuestion($questionText, false);
-
-        if (!$helper->ask($input, $output, $question)) {
-        }
-        */
 
         $output->writeln('<comment>Application ready! Build something amazing.</comment>');
     }
@@ -95,11 +94,12 @@ class InstallerCommand extends Command
 
     /**
      * @param  string $zipFile
+     * @param  string $branch
      * @return $this
      */
-    protected function download($zipFile)
+    protected function download($zipFile, $branch = 'master')
     {
-        $response = (new Client)->get('https://github.com/laravel-rocket/base/archive/master.zip');
+        $response = (new Client)->get('https://github.com/laravel-rocket/base/archive/'.$branch.'.zip');
         file_put_contents($zipFile, $response->getBody());
 
         return $this;
@@ -118,9 +118,10 @@ class InstallerCommand extends Command
      * @param  string $name
      * @param  string $zipFile
      * @param  string $directory
+     * @param  string $branch
      * @return $this
      */
-    protected function extract($name, $zipFile, $directory)
+    protected function extract($name, $zipFile, $directory, $branch = 'master')
     {
         $tempDirectoryName = uniqid($name, true);
         $extractDirectory = $directory.'/'.$tempDirectoryName;
@@ -131,7 +132,7 @@ class InstallerCommand extends Command
         $archive->extractTo($extractDirectory);
         $archive->close();
 
-        rename($extractDirectory.'/base-master', $appDirectory);
+        rename($extractDirectory.'/base-'.$branch, $appDirectory);
         rmdir($tempDirectoryName);
 
         return $this;
