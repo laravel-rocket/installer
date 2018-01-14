@@ -5,6 +5,8 @@ use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Question\ChoiceQuestion;
 use Symfony\Component\Console\Question\ConfirmationQuestion;
 use Symfony\Component\Console\Question\Question;
+use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Output\OutputInterface;
 
 class BaseCommand extends Command
 {
@@ -16,19 +18,16 @@ class BaseCommand extends Command
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-
         $this->input  = $input;
         $this->output = $output;
 
         $this->handle();
-
     }
 
     protected function handle()
     {
-
     }
-        /**
+    /**
      * @param string $description
      * @param array  $options
      * @param int    $default

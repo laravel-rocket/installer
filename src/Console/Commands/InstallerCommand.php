@@ -16,13 +16,17 @@ use Colors\Color;
 
 class InstallerCommand extends BaseCommand
 {
-
-
     protected function configure()
     {
-        $this->setName('new')->setDescription('Create a new Laravel Rocket boilerplate.')->addArgument('name',
-            InputArgument::OPTIONAL)->addOption('dev', null, InputOption::VALUE_NONE,
-            'Installs the latest "development" release');
+        $this->setName('new')->setDescription('Create a new Laravel Rocket boilerplate.')->addArgument(
+            'name',
+            InputArgument::OPTIONAL
+        )->addOption(
+                'dev',
+                null,
+                InputOption::VALUE_NONE,
+            'Installs the latest "development" release'
+            );
     }
 
 
@@ -52,8 +56,12 @@ class InstallerCommand extends BaseCommand
 
         $branch = 'master';
 
-        $this->download($zipFile = $this->makeFilename(), $branch)->extract($name, $zipFile, $directory,
-            $branch)->cleanUp($zipFile);
+        $this->download($zipFile = $this->makeFilename(), $branch)->extract(
+            $name,
+            $zipFile,
+            $directory,
+            $branch
+        )->cleanUp($zipFile);
 
         $composer = $this->findComposer();
         $commands = [
@@ -65,13 +73,19 @@ class InstallerCommand extends BaseCommand
 
         $process = new Process(implode(' && ', $commands), $this->makeAppDirectory($name), null, null, null);
 
-        $process->run(function($type, $line) use ($output) {
+        $process->run(function ($type, $line) use ($output) {
             $output->write($line);
         });
 
         $this->replaceAppName($name, $directory);
 
         $this->output('Application "' . $name . '"" ready! Build something amazing 🛫 .', 'comment');
+
+        $this->output('Your Next Step Is ... ', 'blue');
+        $this->output('   1. Define database schema and update <green>/documents/db.mwb</green> file with MySQL Workbench ( https://dev.mysql.com/downloads/workbench/ )', 'blue');
+        $this->output('   2. run <green>php artisan rocket:generate:from-mwb</green> command to generate required files.', 'blue');
+        $this->output('   3. run <green>php artisan migrate</green> command to create database.', 'blue');
+        $this->output('   4. run <green>php artisan serve</green> command to run server.', 'blue');
     }
 
     /**
@@ -185,7 +199,6 @@ class InstallerCommand extends BaseCommand
         $this->replace([
             'SESSION_NAME' => $cookieName,
         ], $appConfigPath);
-
     }
 
     /**
