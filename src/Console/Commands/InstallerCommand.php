@@ -14,8 +14,9 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Question\ConfirmationQuestion;
 use Colors\Color;
 
-class InstallerCommand extends Command
+class InstallerCommand extends BaseCommand
 {
+
 
     protected function configure()
     {
@@ -25,8 +26,10 @@ class InstallerCommand extends Command
     }
 
 
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function handle()
     {
+        $input = $this->input;
+        $output = $this->output;
 
         $color = new Color();
 
@@ -36,20 +39,18 @@ class InstallerCommand extends Command
 
         $name = $input->getArgument('name');
         if (empty($name)) {
-            throw new RuntimeException('You need to specify app name');
+            $name = $this->askQuestion('What is the app name ?', 'AwesomeApp');
+            if (empty($name)) {
+                throw new RuntimeException('Need to specify App Name');
+            }
         }
 
         $this->verifyApplicationDoesntExist($this->makeAppDirectory($name));
         $directory = getcwd();
 
-        $output->writeln('<info>Setting up application "'.$name.'" with Laravel Rocket 🚀 ...</info>');
+        $this->output('Setting up application "'.$name.'" with Laravel Rocket 🚀 ...', 'info');
 
-        $output->writeln('');
-        $helper = $this->getHelper('question');
-        $questionText = $color('Do you want to use AdminLTE for Admin Dashboard?')->green()->bold().' ';
-        $question = new ConfirmationQuestion($questionText, false);
-
-        $branch = $helper->ask($input, $output, $question) ? 'adminlte' : 'master';
+        $branch = 'master';
 
         $this->download($zipFile = $this->makeFilename(), $branch)->extract($name, $zipFile, $directory,
             $branch)->cleanUp($zipFile);
@@ -70,8 +71,7 @@ class InstallerCommand extends Command
 
         $this->replaceAppName($name, $directory);
 
-
-        $output->writeln('<comment>Application ready! Build something amazing.</comment>');
+        $this->output('Application "' . $name . '"" ready! Build something amazing 🛫 .', 'comment');
     }
 
     /**
