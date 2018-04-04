@@ -44,7 +44,7 @@ class InstallerCommand extends BaseCommand
         $input  = $this->input;
         $output = $this->output;
 
-        $verboseMode = $input->hasOption('verbose') ? true : false;
+        $verboseMode = empty($input->getOption('verbose')) ? false : true;
 
         if (!class_exists('ZipArchive')) {
             throw new RuntimeException('The Zip PHP extension is not installed. Please install it and try again.');
@@ -119,13 +119,22 @@ class InstallerCommand extends BaseCommand
             'DB_PASSWORD' => $databasePassword,
         ]);
 
+        $this->outputNewLine();
+        $this->outputNewLine();
+
         $this->output('Application "' . $name . '"" ready! Build something amazing 🛫 .', 'comment');
 
+        $this->outputNewLine();
+        $this->outputNewLine();
+
         $this->output('Your Next Step Is ... ', 'blue');
-        $this->output('   1. Define database schema and update <green>/documents/db.mwb</green> file with MySQL Workbench ( https://dev.mysql.com/downloads/workbench/ )', 'blue');
-        $this->output('   2. run <green>php artisan rocket:generate:from-mwb</green> command to generate required files.', 'blue');
-        $this->output('   3. run <green>php artisan migrate</green> command to create database.', 'blue');
-        $this->output('   4. run <green>php artisan serve</green> command to run server.', 'blue');
+
+        $this->outputNewLine();
+
+        $this->output('   1. Define database schema and update </blue><green>/documents/db.mwb</green><blue> file with MySQL Workbench ( https://dev.mysql.com/downloads/workbench/ )', 'blue');
+        $this->output('   2. run </blue><green>php artisan rocket:generate:from-mwb</green><blue> command to generate required files.', 'blue');
+        $this->output('   3. run </blue><green>php artisan migrate</green></green><blue> command to create database.', 'blue');
+        $this->output('   4. run </blue><green>>php artisan serve</green><blue> command to run server.', 'blue');
     }
 
     /**

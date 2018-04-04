@@ -97,4 +97,9 @@ class BaseCommand extends Command
             $this->output->writeln($message);
         }
     }
+
+    protected function outputNewLine()
+    {
+        $this->output->writeln('');
+    }
 }
