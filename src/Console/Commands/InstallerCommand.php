@@ -131,10 +131,10 @@ class InstallerCommand extends BaseCommand
 
         $this->outputNewLine();
 
-        $this->output('   1. Define database schema and update </blue><green>/documents/db.mwb</green><blue> file with MySQL Workbench ( https://dev.mysql.com/downloads/workbench/ )', 'blue');
-        $this->output('   2. run </blue><green>php artisan rocket:generate:from-mwb</green><blue> command to generate required files.', 'blue');
-        $this->output('   3. run </blue><green>php artisan migrate</green></green><blue> command to create database.', 'blue');
-        $this->output('   4. run </blue><green>>php artisan serve</green><blue> command to run server.', 'blue');
+        $this->output('   1. Define database schema and update <fg=green>/documents/db.mwb</> file with MySQL Workbench ( https://dev.mysql.com/downloads/workbench/ )', 'blue');
+        $this->output('   2. run <fg=green>php artisan rocket:generate:from-mwb</> command to generate required files.', 'blue');
+        $this->output('   3. run <fg=green>php artisan migrate</> command to create database.', 'blue');
+        $this->output('   4. run <fg=green>php artisan serve</> command to run server.', 'blue');
     }
 
     /**
@@ -198,7 +198,11 @@ class InstallerCommand extends BaseCommand
         $archive->extractTo($extractDirectory);
         $archive->close();
 
-        rename($extractDirectory . '/base-' . $branch, $appDirectory);
+        if (strtoupper(substr(PHP_OS, 0, 3)) === 'WIN') {
+            $this->renameWin($extractDirectory . '/base-' . $branch, $appDirectory);
+        }else{
+            rename($extractDirectory . '/base-' . $branch, $appDirectory);
+        }
         rmdir($tempDirectoryName);
 
         return $this;
@@ -318,5 +322,16 @@ class InstallerCommand extends BaseCommand
         }
 
         return implode('_', $ret);
+    }
+
+    private function renameWin($oldName,$newName) {
+        if (!rename($oldName,$newName)) {
+            if (copy ($oldName,$newName)) {
+                unlink($oldName);
+                return TRUE;
+            }
+            return FALSE;
+        }
+        return TRUE;
     }
 }
