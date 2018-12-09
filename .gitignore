@@ -24,3 +24,4 @@ bower_components
 *.csv
 
 data/db.mwb.bak
+.php_cs.cache
