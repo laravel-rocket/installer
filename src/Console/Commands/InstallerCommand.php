@@ -200,7 +200,7 @@ class InstallerCommand extends BaseCommand
 
         if (strtoupper(substr(PHP_OS, 0, 3)) === 'WIN') {
             $this->renameWin($extractDirectory . '/base-' . $branch, $appDirectory);
-        }else{
+        } else {
             rename($extractDirectory . '/base-' . $branch, $appDirectory);
         }
         rmdir($tempDirectoryName);
@@ -324,14 +324,15 @@ class InstallerCommand extends BaseCommand
         return implode('_', $ret);
     }
 
-    private function renameWin($oldName,$newName) {
-        if (!rename($oldName,$newName)) {
-            if (copy ($oldName,$newName)) {
+    private function renameWin($oldName, $newName)
+    {
+        if (!rename($oldName, $newName)) {
+            if (copy($oldName, $newName)) {
                 unlink($oldName);
-                return TRUE;
+                return true;
             }
-            return FALSE;
+            return false;
         }
-        return TRUE;
+        return true;
     }
 }
