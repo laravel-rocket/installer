@@ -11,7 +11,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 class BaseCommand extends Command
 {
-	/** @var \Symfony\Component\Console\Input\InputInterface */
+    /** @var \Symfony\Component\Console\Input\InputInterface */
     protected $input;
 
     /** @var \Symfony\Component\Console\Output\OutputInterface */
@@ -19,82 +19,82 @@ class BaseCommand extends Command
 
     /** @var array  */
     protected $tasks = [
-	];
+    ];
 
-	/**
-	 * @var \LaravelRocket\Installer\Tasks\BaseTask[]
-	 */
+    /**
+     * @var \LaravelRocket\Installer\Tasks\BaseTask[]
+     */
     protected $taskInstances = [];
 
-	protected function configure()
-	{
-		foreach( $this->tasks as $task ){
-			$task::arguments($this);
-		}
-	}
+    protected function configure()
+    {
+        foreach ($this->tasks as $task) {
+            $task::arguments($this);
+        }
+    }
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $this->input  = $input;
         $this->output = $output;
-		$verboseMode = empty($input->getOption('verbose')) ? false : true;
+        $verboseMode = empty($input->getOption('verbose')) ? false : true;
 
-        foreach( $this->tasks as $task ){
-        	$this->taskInstances[] = new $task($input, $output, $this, $verboseMode);
-		}
+        foreach ($this->tasks as $task) {
+            $this->taskInstances[] = new $task($input, $output, $this, $verboseMode);
+        }
 
         $this->handle();
     }
 
     protected function handle()
     {
-    	$data = [];
-		foreach( $this->taskInstances as $task ){
-			$data = $task->preprocess($data);
-		}
+        $data = [];
+        foreach ($this->taskInstances as $task) {
+            $data = $task->preprocess($data);
+        }
 
-		foreach( $this->taskInstances as $task ){
-			$data = $task->dialog($data);
-		}
+        foreach ($this->taskInstances as $task) {
+            $data = $task->dialog($data);
+        }
 
-		$data = $this->onBeforeUpdate($data);
+        $data = $this->onBeforeUpdate($data);
 
-		foreach( $this->taskInstances as $task ){
-			$data = $task->update($data);
-		}
+        foreach ($this->taskInstances as $task) {
+            $data = $task->update($data);
+        }
 
-		$data = $this->onAfterUpdate($data);
-	}
+        $data = $this->onAfterUpdate($data);
+    }
 
-	protected function onBeforeUpdate($data)
-	{
-		return $data;
-	}
+    protected function onBeforeUpdate($data)
+    {
+        return $data;
+    }
 
-	protected function onAfterUpdate($data)
-	{
-		return $data;
-	}
+    protected function onAfterUpdate($data)
+    {
+        return $data;
+    }
 
-	/**
-	 * @param string      $message
-	 * @param string|null $color
-	 */
-	protected function output(string $message, $color = null)
-	{
-		if (!empty($color)) {
-			if (in_array($color, ['info', 'comment', 'error', 'question'])) {
-				$this->output->writeln('<'.$color.'>'.$message.'</'.$color.'>');
-			} else {
-				$this->output->writeln('<fg='.$color.'>'.$message.'</>');
-			}
-		} else {
-			$this->output->writeln($message);
-		}
-	}
+    /**
+     * @param string      $message
+     * @param string|null $color
+     */
+    protected function output(string $message, $color = null)
+    {
+        if (!empty($color)) {
+            if (in_array($color, ['info', 'comment', 'error', 'question'])) {
+                $this->output->writeln('<'.$color.'>'.$message.'</'.$color.'>');
+            } else {
+                $this->output->writeln('<fg='.$color.'>'.$message.'</>');
+            }
+        } else {
+            $this->output->writeln($message);
+        }
+    }
 
-	protected function outputNewLine()
-	{
-		$this->output->writeln('');
-	}
+    protected function outputNewLine()
+    {
+        $this->output->writeln('');
+    }
 }
