@@ -31,10 +31,10 @@ class Frontend extends BaseTask
     public function update($data)
     {
         FileService::updateEnvironment($data['appName'], $data['appDirectory'], [
-            'DB_HOST'     => $data['nodePackageManager'],
+            'NODE_PACKAGE_MANAGER'     => $data['nodePackageManager'],
         ]);
-
-        ProcessService::run($data['nodePackageManager'] . ' install', $data['appName'], $data['appDirectory'], $this->verboseMode, $this->output);
+        $command = $data['nodePackageManager'] . ' install';
+        ProcessService::run([$command], $data['appName'], $data['appDirectory'], $this->verboseMode, $this->output);
 
         return $data;
     }

@@ -19,7 +19,7 @@ class ProcessService
             $commands = [$commands];
         }
 
-        $process = new Process([implode(' && ', $commands)], FileService::makeDirectoryPath($name, $directory), null, null, null);
+        $process = new Process(implode(' && ', $commands), FileService::makeDirectoryPath($name, $directory), null, null, null);
 
         $process->run(function ($type, $line) use ($output, $verboseMode) {
             if ($verboseMode) {

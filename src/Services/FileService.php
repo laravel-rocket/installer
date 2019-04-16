@@ -27,7 +27,6 @@ class FileService
         return $directory . '/' . $name;
     }
 
-
     /**
      * @param string $directory
      *
@@ -150,11 +149,11 @@ class FileService
         $lines   = file($envPath);
         $updated = [];
         foreach ($lines as $line) {
-            $line = trim($line);
+            $line = rtrim($line);
             if (preg_match('/name="([^"]+)"/', $line, $matches)) {
                 $key = $matches[1];
                 if (array_key_exists($key, $data)) {
-                    $updated[] = '        <env name="'.$key.'" value="'.$data['key'].'"/>';
+                    $updated[] = '        <env name="'.$key.'" value="'.$data[$key].'"/>';
                 } else {
                     $updated[] = $line;
                 }
