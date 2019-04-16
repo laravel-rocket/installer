@@ -25,3 +25,4 @@ bower_components
 
 data/db.mwb.bak
 .php_cs.cache
+.phpunit.result.cache
