@@ -61,7 +61,7 @@ class BaseCommand extends Command
             $data = $task->update($data);
         }
 
-        $data = $this->onAfterUpdate($data);
+        $this->onAfterUpdate($data);
     }
 
     protected function onBeforeUpdate($data)

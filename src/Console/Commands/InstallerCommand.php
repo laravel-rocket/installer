@@ -2,14 +2,20 @@
 
 namespace LaravelRocket\Installer\Console\Commands;
 
+use LaravelRocket\Installer\Tasks\CheckRequirements;
+use LaravelRocket\Installer\Tasks\App;
+use LaravelRocket\Installer\Tasks\Database;
+use LaravelRocket\Installer\Tasks\UnitTest;
+use LaravelRocket\Installer\Tasks\Frontend;
+
 class InstallerCommand extends BaseCommand
 {
     protected $tasks = [
-        \LaravelRocket\Installer\Tasks\CheckRequirements::class,
-        \LaravelRocket\Installer\Tasks\App::class,
-        \LaravelRocket\Installer\Tasks\Database::class,
-        \LaravelRocket\Installer\Tasks\UnitTest::class,
-        \LaravelRocket\Installer\Tasks\Frontend::class,
+        CheckRequirements::class,
+        App::class,
+        Database::class,
+        UnitTest::class,
+        Frontend::class,
     ];
 
     protected function configure()
@@ -29,12 +35,12 @@ class InstallerCommand extends BaseCommand
         $this->outputNewLine();
         $this->outputNewLine();
 
-        $this->output('Application "' . $data['appName'] . '"" ready! Build something amazing 🛫 .', 'comment');
+        $this->output('Application "' . $data['appName'] . '" is ready! Let\'s create something amazing 🛫 .', 'comment');
 
         $this->outputNewLine();
         $this->outputNewLine();
 
-        $this->output('Your Next Step Is ... ', 'blue');
+        $this->output('Next steps are ... ', 'blue');
 
         $this->outputNewLine();
 

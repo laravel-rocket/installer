@@ -3,6 +3,7 @@
 namespace LaravelRocket\Installer\Services;
 
 use GuzzleHttp\Client;
+use ZipArchive;
 
 class FileService
 {
@@ -49,7 +50,7 @@ class FileService
         $extractDirectory  = $directory . DIRECTORY_SEPARATOR . $tempDirectoryName;
         $appDirectory      = static::makeDirectoryPath($name, $directory);
 
-        $archive = new \ZipArchive();
+        $archive = new ZipArchive();
         $archive->open($zipFile);
         $archive->extractTo($extractDirectory);
         $archive->close();
